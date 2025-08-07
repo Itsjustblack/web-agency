@@ -17,28 +17,55 @@ const REVIEWS = [
 		name: "David Adeyemi",
 		firstName: "David",
 		lastName: "Adeyemi",
-		country: "Nigeria",
+		flag: "nigerian-flag",
 		description:
 			"Jason built a seamless gift card platform with excellent Paystack integration. His eye for UI/UX and smooth animations truly elevated the product.",
+		rating: 5,
+	},
+	{
+		name: "Emily Clarke",
+		firstName: "Emily",
+		lastName: "Clarke",
+		flag: "british-flag",
+		description:
+			"Working with Jason on the BellPay website was a delight. He understood the brand vision and delivered a sleek, responsive site with top-tier UX.",
+		rating: 4,
+	},
+	{
+		name: "Samuel Ikenna",
+		firstName: "Samuel",
+		lastName: "Ikenna",
+		flag: "nigerian-flag",
+		description:
+			"Jason improved our site’s performance and user experience with clean code. His collaboration with designers brought great visual polish to the site.",
+		rating: 5,
+	},
+	{
+		name: "Kwame Boateng",
+		firstName: "Kwame",
+		lastName: "Boateng",
+		flag: "ghanian-flag",
+		description:
+			"Jason's contribution to our job consultation platform was pivotal. He built an intuitive UI with solid functionality that made a big difference for our users.",
+		rating: 4,
+	},
+	{
+		name: "Jessica Morgan",
+		firstName: "Jessica",
+		lastName: "Morgan",
+		flag: "american-flag",
+		description:
+			"Jason’s frontend skills are world-class. His work on our startup platform using React and Zustand made the product smooth, fast, and scalable.",
 		rating: 5,
 	},
 	{
 		name: "Chisom Daniels",
 		firstName: "Chisom",
 		lastName: "Daniels",
-		country: "Nigeria",
+		flag: "nigerian-flag",
 		description:
 			"Jason transformed our designs into a stunning, interactive e-commerce site. His use of Framer Motion gave the platform a modern, premium feel.",
-		rating: 5,
-	},
-	{
-		name: "Samuel Ikenna",
-		firstName: "Samuel",
-		lastName: "Ikenna",
-		country: "Nigeria",
-		description:
-			"Jason improved our site’s performance and user experience with clean code. His collaboration with designers brought great visual polish to the site.",
-		rating: 4.7,
+		rating: 4,
 	},
 ];
 
@@ -47,6 +74,29 @@ function App() {
 
 	const handleNext = () => api?.scrollNext();
 	const handlePrev = () => api?.scrollPrev();
+
+	const linearScrollTo = (elementId: string, duration = 1000) => {
+		const target = document.getElementById(elementId);
+		if (!target) return;
+
+		const start = window.pageYOffset;
+		const end = target.getBoundingClientRect().top + start;
+		const distance = end - start;
+		const startTime = performance.now();
+
+		const animateScroll = (currentTime: number) => {
+			const elapsed = currentTime - startTime;
+			const progress = Math.min(elapsed / duration, 1); // linear progress
+
+			window.scrollTo(0, start + distance * progress);
+
+			if (progress < 1) {
+				requestAnimationFrame(animateScroll);
+			}
+		};
+
+		requestAnimationFrame(animateScroll);
+	};
 
 	// const { openModal } = useModalContext();
 
@@ -92,6 +142,7 @@ function App() {
 					</p>
 					<button
 						type="button"
+						onClick={() => linearScrollTo("values", 1500)}
 						className="text-[#5300E4] font-bold px-7 py-2 bg-white rounded-sm w-fit"
 					>
 						Learn More
@@ -115,7 +166,10 @@ function App() {
 					alt=""
 				/>
 			</section>
-			<section className="min-h-screen pt-11 px-16 pb-[162px] relative">
+			<section
+				id="values"
+				className="min-h-screen pt-11 px-16 pb-[162px] relative"
+			>
 				<header className="text-center font-bold text-4xl leading-[95%] w-fit mx-auto relative">
 					<span>
 						You don’t just need “a”{" "}
@@ -133,13 +187,18 @@ function App() {
 					/>
 				</header>
 				<div className="mt-[60px] grid xl:grid-cols-2 gap-5">
-					<div className="bg-[#E5E5E5] rounded-[20px] h-full min-h-[477px] flex">
-						<div className="flex items-center mt-auto p-7 w-full gap-x-6">
-							<span className="text-[#484848] font-extrabold text-3xl">
-								Here’s why we should make you a for your business
+					<div className="relative bg-[#E5E5E5] rounded-[20px] h-full min-h-[477px] flex overflow-hidden">
+						<img
+							className="absolute object-cover object-bottom w-full h-full z-0"
+							src="/assets/background2.jpg"
+							alt=""
+						/>
+						<div className="flex items-center mt-auto p-7 w-full gap-x-6 z-10">
+							<span className="text-white font-extrabold text-3xl">
+								Here’s why we should make you <br /> a for your business
 							</span>
 							<img
-								className="h-9.5 shrink-0 object-cover ml-auto"
+								className="h-[38px] shrink-0 object-cover ml-auto"
 								src="/assets/arrow.svg"
 								alt=""
 							/>
@@ -281,8 +340,8 @@ function App() {
 									</div>
 									<img
 										className="w-10.5 h-6 ml-auto"
-										src="/assets/nigerian-flag.svg"
-										alt=""
+										src={`/assets/${review.flag}.svg`}
+										alt={review.flag}
 									/>
 								</div>
 								<p className="mt-8.5 text-[#525252] font-medium">
@@ -301,7 +360,10 @@ function App() {
 					Gallery
 				</h2>
 				<div className="grid grid-cols-3 gap-x-9.5 z-5 relative mt-20">
-					<a href="https://bellpay.vercel.app/">
+					<a
+						href="https://bellpay.vercel.app/"
+						target="_blank"
+					>
 						<img
 							className="object-cover rounded-lg aspect-video h-[280px]"
 							src="/assets/bellpay.jpg"
@@ -311,7 +373,10 @@ function App() {
 						/>
 					</a>
 
-					<a href="https://luton-apparel.vercel.app/">
+					<a
+						href="https://luton-apparel.vercel.app/"
+						target="_blank"
+					>
 						<img
 							className="object-cover rounded-lg aspect-video h-[280px] mt-20"
 							src="/assets/luton.jpg"
@@ -321,7 +386,10 @@ function App() {
 						/>
 					</a>
 
-					<a href="https://www.omnikado.com/">
+					<a
+						href="https://www.omnikado.com/"
+						target="_blank"
+					>
 						<img
 							className="object-cover rounded-lg aspect-video h-[280px]"
 							src="/assets/omnikado.jpg"
